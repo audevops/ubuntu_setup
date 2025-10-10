@@ -40,7 +40,7 @@ sudo usermod -aG docker jack
 print_msg "Testing Docker installation..."
 docker --version
 docker run --rm hello-world
-
+apt  install docker-compose -y
 print_msg "Docker installation and test completed!"
 echo "You may need to log out and log back in for group changes to take effect."
 
