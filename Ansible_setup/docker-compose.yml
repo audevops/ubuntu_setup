@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  ansible:
+    image: williamyeh/ansible:alpine3
+    container_name: ansible
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    command: /bin/sh           # Keeps container alive instead of running ansible-playbook
+    working_dir: /ansible
+    volumes:
+      - ./ansible_playbooks:/ansible
+

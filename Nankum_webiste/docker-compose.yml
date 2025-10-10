@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  web:
+    image: nginx:latest
+    container_name: nginx_local
+    ports:
+      - "80:80"  # Map host port 80 to container port 80
+    volumes:
+      - ./:/usr/share/nginx/html  # Map local 'html' folder to nginx web root
+    restart: unless-stopped
+
