@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3"
 
 services:
   jenkins:
@@ -9,7 +9,7 @@ services:
       - "8080:8080"  # Jenkins web UI
       - "50000:50000" # Jenkins agent port
     volumes:
-      - jenkins_home:/jenkins_home  # Persistent Jenkins data
+      - /jenkins_home:/jenkins_home  # Persistent Jenkins data
       - /var/run/docker.sock:/var/run/docker.sock # Optional: allow Jenkins to run Docker commands
 
 volumes:
