@@ -1,0 +1,21 @@
+---
+- name: Check Nankum website using public IP
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    public_ip: ""
+
+  tasks:
+    - name: Access Nankum website via public IP
+      uri:
+        url: "http://{{ public_ip }}"
+        method: GET
+        return_content: yes
+      register: nankum_page
+      ignore_errors: yes
+
+    - name: Display first 500 chars of Nankum page
+      debug:
+        msg: "{{ nankum_page.content[:500] | default('No response from Nankum site') }}"
+

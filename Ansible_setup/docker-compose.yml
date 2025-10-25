@@ -2,13 +2,14 @@ version: "3"
 
 services:
   ansible:
-    image: williamyeh/ansible:alpine3
+    build: .                     # Build from your Dockerfile
+    image: ansible-custom:latest # Optional, your custom tag
     container_name: ansible
     restart: unless-stopped
     tty: true
     stdin_open: true
-    command: /bin/sh           # Keeps container alive instead of running ansible-playbook
     working_dir: /ansible
+    command: /bin/sh
     volumes:
       - ./ansible_playbooks:/ansible
 

@@ -1,0 +1,48 @@
+---
+- name: Get public IP from Telstra Smart Modem Gen3 and verify NANKUM PTY LTD
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+    - name: Fetch modem homepage
+      uri:
+        url: "{{ modem_base }}/"
+        method: GET
+        return_content: yes
+      register: modem_home
+
+    - name: Extract public IP from homepage HTML
+      set_fact:
+        public_ip: "{{ modem_home.content | regex_search('((?:\\d{1,3}\\.){3}\\d{1,3})') }}"
+
+    - name: Display public IP
+      debug:
+        msg: "Public IP: {{ public_ip }}"
+
+    - name: Make HTTP request to public IP
+      uri:
+        url: "http://{{ public_ip }}"
+        method: GET
+        return_content: yes
+      register: public_ip_page
+      ignore_errors: yes
+
+    - name: Display first 500 chars of the public IP page
+      debug:
+        msg: "{{ public_ip_page.content[:500] | default('No response from public IP') }}"
+
+    - name: Check if page contains the expected owner
+      set_fact:
+        owner_match: "{{ public_ip_page.content is defined and (check_owner in public_ip_page.content) }}"
+
+    - name: Display owner check result
+      debug:
+        msg: >
+          {% if owner_match %}
+            Page at http://{{ public_ip }} contains {{ check_owner }}.
+          {% else %}
+            Page at http://{{ public_ip }} does NOT contain {{ check_owner }}.
+          {% endif %}
+
